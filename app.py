@@ -22,6 +22,8 @@ def cadastrar_cliente():
         telefone = request.form['telefone']
         email = request.form['email']
 
+        #print(f"DADOS RECEBIDOS: Nome:={nome}, Telefone:={telefone}, Email:={email}")
+
         novo_cliente = Cliente(nome=nome, telefone=telefone, email=email)
 
         db.session.add(novo_cliente)
