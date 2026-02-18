@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Clientes</title>
+</head>
+<body>
+    <h1>Clientes Cadastrados</h1>
+    <a href="/cadastro">Cadastrar Novo</a>
+    <hr>
+
+    <ul>
+        {% for cliente in clientes %}
+            <li>
+                <strong>Nome:</strong> {{ clientes.nome }} <br>
+                <strong>Email:</strong> {{ clientes.email }} <br>
+                <strong>Telefone:</strong> {{ clientes.telefone }}
+                <hr>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
