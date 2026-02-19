@@ -1,16 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <h1>Cadastro de Clientes</h1>
 
     <form action="/cadastro" method="POST">
-        <label>Nome:</label><input type="text" name="nome">
-        <label>Telefone:</label><input type="text" name="telefone">
+        <label>Nome:</label><input type="text" name="nome"> <br>
+        <label>Telefone:</label><input type="text" name="telefone"> <br>
         <label>Email:</label><input type="text" name="email">
         <button type="submit">Salvar</button>
     </form>

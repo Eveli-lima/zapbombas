@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% block title %}Perfil: {{ cliente.nome }}{% endblock %}
+
+{% block content %}
+<div class="card shadow">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h2 class="mb-0">{{ cliente.nome }}</h2>
+        <span class="badge bg-light text-dark">ID: #{{ cliente.id }}</span>
+    </div>
+    <div class="card-body">
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <p class="mb-1 text-muted">Contato:</p>
+                <h5>📞 {{ cliente.telefone }}</h5>
+            </div>
+            <div class="col-md-6">
+                <p class="mb-1 text-muted">E-mail:</p>
+                <h5>✉️ {{ cliente.email }}</h5>
+            </div>
+        </div>
+
+        <hr>
+        
+       <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3>Histórico de O.S.</h3>
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalOS">
+                + NOVA O.S.
+            </button>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover border">
+                <thead class="table-light">
+                    <tr>
+                        <th>Data Entrada</th>
+                        <th>Equipamento / Defeito</th>
+                        <th>Status</th>
+                        <th class="text-end">Valor Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for os in servicos %}
+                    <tr>
+                        <td>{{ os.data_entrada }}</td>
+                        
+                        <td>
+                            <strong>{{ os.equipamento }}</strong> 
+                            {% if os.marca %} <small class="text-muted">({{ os.marca }})</small> {% endif %}
+                            <br>
+                            <span class="text-muted small">Defeito: {{ os.defeito_relatado }}</span>
+                        </td>
+
+                        <td>
+                            <span class="badge bg-warning text-dark">{{ os.status }}</span>
+                        </td>
+
+                        <td class="text-end">
+                            {% if os.valor_total %}
+                                <span class="text-success fw-bold">R$ {{ "%.2f"|format(os.valor_total) }}</span>
+                            {% else %}
+                                <span class="text-muted">---</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center py-4 text-muted">
+                            Nenhuma O.S. registrada para este cliente.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="mt-4">
+            <a href="/clientes" class="btn btn-secondary">Voltar</a>
+        </div>
+    </div>
+</div>
+
+<!-- ===========MODAL============== -->
+<div class="modal fade" id="modalOS" tabindex="-1" aria-labelledby="modalOSLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="modalOSLabel">📋 Nova O.S. - Entrada</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      
+      <form action="{{ url_for('adicionar_os', cliente_id=cliente.id) }}" method="POST" enctype="multipart/form-data">
+          <div class="modal-body">
+              
+              <div class="row mb-3">
+                  <div class="col-6">
+                      <label class="form-label">Data de Entrada</label>
+                      <input type="date" class="form-control" name="data_entrada" required>
+                  </div>
+                  <div class="col-6">
+                      <label class="form-label">Equipamento</label>
+                      <input type="text" class="form-control" name="equipamento" placeholder="Ex: Bomba D'água" required>
+                  </div>
+              </div>
+
+              <div class="mb-3">
+                  <label class="form-label">Marca / Modelo</label>
+                  <input type="text" class="form-control" name="marca" placeholder="Ex: Dancor 1/2 CV">
+              </div>
+
+              <div class="mb-3">
+                  <label class="form-label">Relato do Cliente (Defeito)</label>
+                  <textarea class="form-control" name="defeito_relatado" rows="3" placeholder="O cliente disse que faz barulho mas não puxa água..." required></textarea>
+              </div>
+              
+              <div class="mb-3">
+                  <label class="form-label">Foto do Equipamento 📷</label>
+                  <input type="file" class="form-control" name="foto" accept="image/*">
+              </div>
+
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-primary">Gerar O.S.</button>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
