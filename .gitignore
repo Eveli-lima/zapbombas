@@ -1,0 +1,12 @@
+# Ignorar o ambiente virtual
+venv/
+
+# Ignorar banco de dados e arquivos locais
+instance/
+*.db
+
+# Ignorar arquivos compilados do Python
+__pycache__/
+
+# Ignorar fotos de upload dos clientes
+static/uploads/
