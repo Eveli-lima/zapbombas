@@ -1,7 +1,5 @@
 # 🛠️ ZapBombas - Sistema de Gestão de Oficina
 
-# 🛠️ ZapBombas - Sistema de Gestão de Ordens de Serviço
-
 O **ZapBombas** é um sistema web desenvolvido para gerenciar a entrada e saída de equipamentos em uma oficina de manutenção (focado em bombas d'água e piscinas). O projeto permite o cadastro de clientes, abertura de Ordens de Serviço (O.S.) com fotos e acompanhamento de status.
 
 ## 🚀 Tecnologias Utilizadas
