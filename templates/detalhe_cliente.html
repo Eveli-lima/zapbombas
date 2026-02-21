@@ -69,6 +69,13 @@
                                 <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalOrcamento{{ os.id }}">
                                     Orçar 🛠️
                                 </button>
+                            
+                            {% elif  os.status == 'Aguardando aprovação' %}
+                                <a href="https://wa.me/55{{ cliente.telefone | replace(' ', '') | replace('-', '') }}?text=Olá {{ cliente.nome }}, o orçamento do equipamento {{ os.equipamento }} ficou em R$ {{ os.valor_total }}. Podemos prosseguir com o serviço?" 
+                                    target="_blank" 
+                                    class="btn btn-success btn-sm">
+                                    Enviar Orçamento
+                                </a>
                             {% endif %}
                         </td>
                     </tr>
