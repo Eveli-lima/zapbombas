@@ -106,5 +106,21 @@ def adicionar_os(cliente_id):
     
     return redirect(url_for('detalhe_cliente', id=cliente_id))
 
+# ROTA PARA SALVAR O ORÇAMENTO
+@app.route('/fazer_orcamento/<int:os_id>', methods=['POST'])
+def fazer_orcamento(os_id):
+    os_atual = OrdemServico.query.get_or_404(os_id)
+
+    os_atual.diagnostico_tecnico = request.form['diagnostico_tecnico']
+    os_atual.pecas = request.form['pecas']
+    os_atual.valor_total = float(request.form['valor_total'])
+
+    os_atual.status = 'Aguardando aprovação'
+
+    db.session.commit()
+
+    return redirect(url_for('detalhe_cliente', id=os_atual.cliente_id))
+
+
 if __name__ == '__main__':
     app.run(debug=True)

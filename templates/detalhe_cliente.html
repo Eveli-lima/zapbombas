@@ -37,6 +37,7 @@
                         <th>Equipamento / Defeito</th>
                         <th>Status</th>
                         <th class="text-end">Valor Total</th>
+                        <th class="text-center">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -48,7 +49,7 @@
                             <strong>{{ os.equipamento }}</strong> 
                             {% if os.marca %} <small class="text-muted">({{ os.marca }})</small> {% endif %}
                             <br>
-                            <span class="text-muted small">Defeito: {{ os.defeito_relatado }}</span>
+                            <span class="text-muted small">Relato: {{ os.defeito_relatado }}</span>
                         </td>
 
                         <td>
@@ -62,10 +63,18 @@
                                 <span class="text-muted">---</span>
                             {% endif %}
                         </td>
+                        
+                        <td class="text-center">
+                            {% if os.status == 'Em Análise' %}
+                                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalOrcamento{{ os.id }}">
+                                    Orçar 🛠️
+                                </button>
+                            {% endif %}
+                        </td>
                     </tr>
                     {% else %}
                     <tr>
-                        <td colspan="4" class="text-center py-4 text-muted">
+                        <td colspan="5" class="text-center py-4 text-muted">
                             Nenhuma O.S. registrada para este cliente.
                         </td>
                     </tr>
@@ -80,7 +89,43 @@
     </div>
 </div>
 
-<!-- ===========MODAL============== -->
+{% for os in servicos %}
+    {% if os.status == 'Em Análise' %}
+        <div class="modal fade" id="modalOrcamento{{ os.id }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title">Orçamento: {{ os.equipamento }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ url_for('fazer_orcamento', os_id=os.id) }}" method="POST">
+                        <div class="modal-body text-start">
+                            <div class="mb-3">
+                                <label class="form-label">Diagnóstico Técnico</label>
+                                <textarea class="form-control" name="diagnostico_tecnico" rows="3" required placeholder="O que o técnico encontrou..."></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Peças Necessárias</label>
+                                <input type="text" class="form-control" name="pecas" placeholder="Ex: Rolamento, Selo mecânico">
+                            </div>
+                            <div class="row">
+                                <div class="mb-3">
+                                    <label class="form-label">Valor Total (R$)</label>
+                                    <input type="number" step="0.01" class="form-control" name="valor_total" required placeholder="0.00">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-success">Salvar Orçamento</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endfor %}
+
 <div class="modal fade" id="modalOS" tabindex="-1" aria-labelledby="modalOSLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -91,7 +136,6 @@
       
       <form action="{{ url_for('adicionar_os', cliente_id=cliente.id) }}" method="POST" enctype="multipart/form-data">
           <div class="modal-body">
-              
               <div class="row mb-3">
                   <div class="col-6">
                       <label class="form-label">Data de Entrada</label>
@@ -110,14 +154,13 @@
 
               <div class="mb-3">
                   <label class="form-label">Relato do Cliente (Defeito)</label>
-                  <textarea class="form-control" name="defeito_relatado" rows="3" placeholder="O cliente disse que faz barulho mas não puxa água..." required></textarea>
+                  <textarea class="form-control" name="defeito_relatado" rows="3" placeholder="O cliente disse que..." required></textarea>
               </div>
               
               <div class="mb-3">
                   <label class="form-label">Foto do Equipamento 📷</label>
                   <input type="file" class="form-control" name="foto" accept="image/*">
               </div>
-
           </div>
           <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
